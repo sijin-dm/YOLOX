@@ -1,6 +1,28 @@
 <div align="center"><img src="assets/logo.png" width="350"></div>
 <img src="assets/demo.png" >
 
+
+## How to build tensorrt engine with torch less than 1.7?
+### Convert to onnx
+```
+pip3 install -r requirements_pytorch2010.txt
+python3 tools/export_onnx.py --output-name yolox_tiny.onnx -n yolox-tiny -c yolox_tiny.pth
+```
+Be careful that the model use scale of 1.0 in deepstream after tag 1.1.
+
+### onnx-tensorrt
+Install onnx-tensorrt https://github.com/onnx/onnx-tensorrt/tree/7.0
+Remember don't install it under the folder of nas...
+```
+cmake .. -DTENSORRT_ROOT=/usr/lib/x86_64-linux-gnu && make -j
+```
+
+### Convert onnx model to tensorrt.
+```
+onnx2trt /path/to/yolox_tiny.onnx -o model.plan
+```
+
+
 ## Introduction
 YOLOX is an anchor-free version of YOLO, with a simpler design but better performance! It aims to bridge the gap between research and industrial communities.
 For more details, please refer to our [report on Arxiv](https://arxiv.org/abs/2107.08430).
